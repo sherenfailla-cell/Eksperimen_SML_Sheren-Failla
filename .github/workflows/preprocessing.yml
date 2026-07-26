@@ -5,16 +5,42 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: preprocessing-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   preprocess:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12.7
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12.7"
+          cache: pip
+
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt
+
       - name: Run preprocessing
         working-directory: preprocessing
         run: python automate_Sheren-Failla.py
+
+      - name: Validate processed dataset
+        run: |
+          test -s preprocessing/telco_preprocessing/telco_train.csv
+          test -s preprocessing/telco_preprocessing/telco_test.csv
+
+      - name: Upload processed dataset
+        uses: actions/upload-artifact@v4
+        with:
+          name: telco-preprocessed-${{ github.sha }}
+          path: preprocessing/telco_preprocessing/
+          if-no-files-found: error
+          retention-days: 14

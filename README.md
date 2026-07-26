@@ -1,5 +1,7 @@
 # Telco Customer Churn — Experiment & Automated Preprocessing
 
+[![Auto Preprocessing](https://github.com/sherenfailla-cell/Eksperimen_SML_Sheren-Failla/actions/workflows/preprocessing.yml/badge.svg)](https://github.com/sherenfailla-cell/Eksperimen_SML_Sheren-Failla/actions/workflows/preprocessing.yml)
+
 Part of an end-to-end MLOps pipeline (experiment → tracked training → CI retraining → monitored serving).
 
 **This repo covers the experimentation stage:**
